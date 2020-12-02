@@ -31,7 +31,7 @@ def get_arguments():
 
 
 def change_mac(interface, new_mac):
-    print("[+] Changing MAC address for " + interface + " to " + new_mac)
+    # print("[+] Changing MAC address for " + interface + " to " + new_mac)
 
     # call subprocess module to use call command first way
     # seperated command calls
