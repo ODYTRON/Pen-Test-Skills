@@ -6,6 +6,9 @@ import subprocess
 # Let the user parse the program and the commands in terminal line at once
 import optparse
 
+# import module for regular expressions
+import re
+
 def get_arguments():
     # parser object to handle user input
     parser = optparse.OptionParser()
@@ -31,5 +34,21 @@ def change_mac(interface, new_mac):
 options = get_arguments()
 
 # then we call the function
-change_mac(options.interface, options.new_mac)
+# change_mac(options.interface, options.new_mac)
+
+# capture the value of the interface with check_output
+ifconfig_result = subprocess.check_output(["ifconfig", options.interface])
+print(ifconfig_result)
+
+# search ifconfig_result to capture only mac address with regular expressions
+# thanks to pythex.org
+mac_address_search_result = re.search(r"\w\w:\w\w:\w\w:\w\w:\w\w:\w\w", ifconfig_result)
+
+# check if the interface has a mac
+if mac_address_search_result:
+    # print only the first result with group(0)
+    print(mac_address_search_result.group(0))
+else:
+    print("[-] Could not read MAC address")
+
 
