@@ -35,7 +35,8 @@ def get_current_mac(interface):
     ifconfig_result = subprocess.check_output(["ifconfig", interface])
     # search ifconfig_result to capture only mac address with regular expressions
     # thanks to pythex.org
-    mac_address_search_result = re.search(r"\w\w:\w\w:\w\w:\w\w:\w\w:\w\w", ifconfig_result)
+    # dont forget to cast ifconfig result to str to work with python3
+    mac_address_search_result = re.search(r"\w\w:\w\w:\w\w:\w\w:\w\w:\w\w", str(ifconfig_result))
 
     # check if the interface has a mac
     if mac_address_search_result:
