@@ -34,7 +34,7 @@ def process_sniffed_packet(packet):
         # print(packet.show)
         # this is how to concatenate two strings , see the format at the bottom notes
         url = get_url(packet)
-        # convert byte object to string to follow python3 requirents
+        # convert byte object to string to follow python3 requirements
         # print("[+] HTTP Request >> " + str(url))
         # OR  USE your_var.decode()
         print("[+] HTTP Request >> " + url.decode())

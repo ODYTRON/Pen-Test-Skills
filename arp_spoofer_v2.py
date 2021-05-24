@@ -40,7 +40,7 @@ def restore(destination_ip, source_ip):
     scapy.send(packet, count=4, verbose=False)
 
 
-target_ip = "192.168.22.4"
+target_ip = "192.168.22.15"
 gateway_ip = "192.168.22.1"
 
 # Be in the middle of the connection and send continiously packets and sleep two secs
@@ -60,7 +60,8 @@ try:
         # overwrite line with \r and put a comma in the end of print statement for dynamic printing
         # print("\r [+] Packets Sent: " + str(count)),
         # optimized for python3 for dynamic printing
-        print("\r [+] Packets Sent: " + str(count), end="")
+        # add , end="" in the next line
+        print("\r [+] Packets Sent: " + str(count))
         # flush everything out of the buffer
         sys.stdout.flush()
         time.sleep(2)
@@ -73,8 +74,7 @@ except KeyboardInterrupt:
 
 
 
-# don't forget to allow traffic through the attacker in order to be the middle man
-# echo 1 > /proc/sys/net/ipv4/ip_forward
+
 
 
 
