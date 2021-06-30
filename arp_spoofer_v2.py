@@ -40,8 +40,8 @@ def restore(destination_ip, source_ip):
     scapy.send(packet, count=4, verbose=False)
 
 
-target_ip = "192.168.22.15"
-gateway_ip = "192.168.22.1"
+target_ip = "192.168.1.11"
+gateway_ip = "192.168.1.1"
 
 # Be in the middle of the connection and send continiously packets and sleep two secs
 # to maintain spoofing. otherwise it will send one packet only and mac address will change
